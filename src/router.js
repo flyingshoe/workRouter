@@ -1,5 +1,6 @@
 import Login from "./Login";
 import Dashboard from "./Dashboard";
+import Userlist from "./userList";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
@@ -14,30 +15,36 @@ export default function Routing() {
   }, []);
 
   return (
-    <Switch>
-      {/* <Redirect exact from="/" to="/login" /> */}
-      <Route
-        exact
-        path="/"
-        render={() =>
-          isAuth ? <Redirect to="/Dashboard" /> : <Redirect to="/login" />
-        }
-      />
-      <Route
-        path="/login"
-        render={() => <Login setIsAuth={setIsAuth} />}
-      ></Route>
-      {/* <Route
-        path="/dashboard"
-        render={() => <Dashboard name="DASH PROPS!" setIsAuth={setIsAuth} />}
-      ></Route> */}
-      <ProtectedRoute
-        path="/dashboard"
-        component={Dashboard}
-        name="DASH PROPS!"
-        setIsAuth={setIsAuth}
-        isAuth = {isAuth}
-      />
-    </Switch>
+    <>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() =>
+            isAuth ? <Redirect to="/Dashboard" /> : <Redirect to="/login" />
+          }
+        />
+        <Route
+          path="/login"
+          render={({ location }) => (
+            <Login location={location} setIsAuth={setIsAuth} />
+          )}
+        ></Route>
+        <ProtectedRoute
+          path="/dashboard"
+          component={Dashboard}
+          name="DASHBOARD!"
+          setIsAuth={setIsAuth}
+          isAuth={isAuth}
+        />
+        <ProtectedRoute
+          path="/userlist"
+          component={Userlist}
+          name="USERLIST!"
+          setIsAuth={setIsAuth}
+          isAuth={isAuth}
+        />
+      </Switch>
+    </>
   );
 }
